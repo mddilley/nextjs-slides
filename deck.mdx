@@ -3,150 +3,408 @@ import {
   CodeSurferColumns,
   Step,
 } from "code-surfer";
-import { github, vsDark } from "@code-surfer/themes";
+import {
+  github,
+  vsDark,
+  nightOwl,
+} from "@code-surfer/themes";
 
-export const theme = vsDark;
+export const theme = nightOwl;
 
-# Hello 👋
+## 🚀👩‍🚀 Discovery Day 11/13/2020 👨‍🚀🚀
 
-You are using [MDX Deck](https://github.com/jxnblk/mdx-deck) and [Code Surfer](https://codesurfer.pomb.us)
-
----
-
-<CodeSurfer>
-
-```js title="This is a title" subtitle="and this a subtitle"
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
-}
-
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
-
-  if (!sit || ut < 1) {
-    return [];
-  }
-
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
-
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
-  }
-
-  return aliqua;
-}
-```
-
-```js
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
-}
-
-function adipiscing(...elit) {
-  if (!elit.sit) {
-    return [];
-  }
-
-  const sed = elit[0];
-  return eiusmod.tempor(sed) ? sed : [sed];
-}
-
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
-
-  if (!sit || ut < 1) {
-    return [];
-  }
-
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
-
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
-  }
-
-  return aliqua;
-}
-```
-
-```diff 1[10:14],2[15:19],3[22:27],10:12
-
-```
-
-</CodeSurfer>
+## Mission: Explore Next.js (a React framework)
 
 ---
 
-<CodeSurferColumns themes={[vsDark, github]}>
+# React ⚛️
+
+#### A JavaScript framework that helps us build faster with:
+
+##### 🧱♻️ Reusable blocks called components ♻️🧱
+
+##### 🧠 Internalized and portable logic 🧠
+
+##### ✨ Nice abstractions for keeping UIs up to date when things change ✨
+
+---
+
+# React Frameworks
+
+#### There are still many decisions to make
+
+##### ❓ Routing library ❓
+
+##### ❓ File system organization ❓
+
+##### ❓ Data fetching ❓
+
+---
+
+# Routing
+
+## How users navigate within this application 🧭
+
+##### What happens when you click on links and browser buttons like ◀️ and ▶️ ?
+
+##### How should we handle dynamic routes like `/things/432521`?
+
+---
+
+# File System Organization
+
+##### Well organized projects make development intuitive 🙌
+
+##### Less organized projects make development difficult 😖
+
+##### Maybe this could be part of the framework so we don't need to think about it?
+
+---
+
+## Routing and the file system work hand in hand 🤝
+
+Examples
+
+---
+
+# Data Fetching
+
+### When do we request data from outside sources? 🤔
+
+##### Once when the application is built and deployed?
+
+##### Every once in a while?
+
+##### Every time?
+
+---
+
+<CodeSurferColumns themes={[vsDark, nightOwl]}>
+
 
 <Step>
 
-```js
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
+
+```js title="React"
+import React, { useState } from "react";
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <button onClick={handleClick}>
+      Clicked {count} {count === 1 ? "time" : "times"}
+    </button>
+  );
+};
+
+export default Counter;
 ```
 
-```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
+```js title="Svelte"
+<script>
+	let count = 0;
+
+	function handleClick() {
+		count += 1;
+	}
+</script>
+
+<button on:click={handleClick}>
+	Clicked {count} {count === 1 ? 'time' : 'times'}
+</button>
 ```
 
 </Step>
 
+
 <Step>
 
-```js
-const lorem = (ipsum, dolor, sit) => {
-  const amet = dolor - ipsum;
-  return consectetur.adipiscing(
-    {
-      elit: sed.eiusmod(sit - dolor) / amet + 2,
-    },
-    (tempor, incididunt) => ipsum + amet * incididunt
+
+```js 4:5 title="Declare state the React way"
+import React, { useState } from "react";
+
+const Counter = () => {
+  // Declare a state variable (count) and an update function (setCount) and set an initial value
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <button onClick={handleClick}>
+      Clicked {count} {count === 1 ? "time" : "times"}
+    </button>
   );
 };
 
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
+export default Counter;
 ```
 
-```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
+```js 2:5 title="Declare state the Svelte way"
+<script>
+    // Declare a variable and assign an initial value
+    // Re-assign to update state
+    // Less complex 👍
+	let count = 0;
 
-const sed = (eiusmod, tempor, incididunt) => {
-  const ut = tempor - eiusmod;
-  return labore.et(
-    {
-      amet: dolore.magna(incididunt - tempor) / ut + 2,
-    },
-    (aliqua, elit) => eiusmod + ut * elit
-  );
-};
+	function handleClick() {
+		count += 1;
+	}
+</script>
+
+<button on:click={handleClick}>
+	Clicked {count} {count === 1 ? 'time' : 'times'}
+</button>
 ```
 
 </Step>
+
+
+<Step>
+
+
+```js 6:9 title="Handle click the React way"
+import React, { useState } from "react";
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    // Call setCount() to update state with incremented value
+    setCount(count + 1);
+  };
+
+  return (
+    <button onClick={handleClick}>
+      Clicked {count} {count === 1 ? "time" : "times"}
+    </button>
+  );
+};
+
+export default Counter;
+```
+
+```js 4:8 title="Handle click event the Svelte way"
+<script>
+	let count = 0;
+
+	function handleClick() {
+        // Increment count and re-assign value
+        // Less complex 👍
+		count += 1;
+	}
+</script>
+
+<button on:click={handleClick}>
+	Clicked {count} {count === 1 ? 'time' : 'times'}
+</button>
+```
+
+</Step>
+
+
+<Step>
+
+
+```js 10:13 title="Display a button the React way"
+import React, { useState } from "react";
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
+  // Use JSX (extension of JavaScript) for attributes
+  return (
+    <button className="cool-button" onClick={handleClick}>
+      Clicked {count} {count === 1 ? "time" : "times"}
+    </button>
+  );
+};
+
+export default Counter;
+```
+
+```js 9:11 title="Display a button the Svelte way"
+<script>
+	let count = 0;
+
+	function handleClick() {
+		count += 1;
+	}
+</script>
+
+// Use plain old HTML attributes and Svelte directives
+// Similar complexity 😐
+<button class="cool-button" on:click={handleClick}>
+	Clicked {count} {count === 1 ? 'time' : 'times'}
+</button>
+```
+
+</Step>
+
+
+<Step>
+
+
+```js title="Asynchronous fetch the React way"
+// Seems simpler at first
+const { loading, error, data } = useQuery(crashQuery);
+
+return (
+  <div>
+    {loading && <Spinner />}
+    {!!data.atd_txdot_crashes &&
+      data.atd_txdot_crashes.map((crash) => (
+        <div>{crash.crash_id}</div>
+      ))}
+    {error && <div>Error: {error}</div>}
+  </div>
+);
+```
+
+```js title="Asynchronous fetch the Svelte way"
+// Seems more complex at first
+<script>
+	const crashes = query(client, { query: crashQuery });
+</script>
+
+<!-- Await block -->
+  {#await $crashes}
+    <Spinner />
+  {:then result}
+    {#each result.data.atd_txdot_crashes as crash}
+      <div>{crash.crash_id}
+    {/each}
+  {:catch error}
+    Error: {error}
+  {/await}
+```
+
+</Step>
+
+
+<Step>
+
+
+```js 1:2 title="Handling the response the React way"
+// Apollo handles loading and error states and data fetch from Vision Zero database
+const { loading, error, data } = useQuery(crashQuery);
+
+return (
+  <div>
+    // Response handling is elsewhere
+    {loading && <Spinner />}
+    {!!data.atd_txdot_crashes &&
+      data.atd_txdot_crashes.map((crash) => (
+        <div>{crash.crash_id}</div>
+      ))}
+    {error && <div>Error: {error}</div>}
+  </div>
+);
+```
+
+```js 2:3 title="Handling the response the Svelte way"
+<script>
+    // Apollo handles data fetch from from Vision Zero database
+	const crashes = query(client, { query: crashQuery });
+</script>
+
+<!-- Await block -->
+  {#await $crashes}
+    <Spinner />
+  {:then result}
+    {#each result.data.atd_txdot_crashes as crash}
+      <div>{crash.crash_id}
+    {/each}
+  {:catch error}
+    Error: {error}
+  {/await}
+```
+
+</Step>
+
+
+<Step>
+
+
+```js 4:9 title="Displaying the response the React way"
+const { loading, error, data } = useQuery(crashQuery);
+
+return (
+  <div>
+    // Render view conditionally // Easy to get lost in the
+    logical flow
+    {loading && <Spinner />}
+    {!!data.atd_txdot_crashes &&
+      data.atd_txdot_crashes.map((crash) => (
+        <div>{crash.crash_id}</div>
+      ))}
+    {error && <div>Error: {error}</div>}
+  </div>
+);
+```
+
+```js 5:16 title="Displaying the response the Svelte way"
+<script>
+	const crashes = query(client, { query: crashQuery });
+</script>
+
+<!-- Await block -->
+<!-- Mixes response handling with display logic 🙌 -->
+<!-- More readable line-by-line -->
+  {#await $crashes}
+    <Spinner />
+  {:then result}
+    {#each result.data.atd_txdot_crashes as crash}
+      <div>{crash.crash_id}
+    {/each}
+  {:catch error}
+    Error: {error}
+  {/await}
+```
+
+</Step>
+
 
 </CodeSurferColumns>
 
+
 ---
 
-docs:  
-[codesurfer.pomb.us](https://codesurfer.pomb.us)
+# Pros of Svelte
+
+- Fast development
+- More readable
+- Claims to render faster but I did not test
+- Built-in cues for accessibility
+
+---
+
+# Cons of Svelte
+
+- It is new so troubleshooting can be frustrating
+- Logical blocks and directives have a learning curve
+
+---
+
+# [Demo](http://localhost:5000/) of Svelte app
+
+## Using Vision Zero Database developed for the Vision Zero Team (test environment)
+
+### ⚒️ Tools 🛠️
+
+- Bootstrap to quickly build UI
+
+  - Sveltestrap https://github.com/bestguy/sveltestrap
+
+- Apollo to connect to Hasura (database layer that will provide data via GraphQL API)
+  - svelte-apollo https://github.com/timhall/svelte-apollo
