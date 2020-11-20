@@ -1,23 +1,21 @@
-import {
-  CodeSurfer,
-  CodeSurferColumns,
-  Step,
-} from "code-surfer";
+import { CodeSurfer, Step } from "code-surfer";
 import {
   github,
   vsDark,
   nightOwl,
 } from "@code-surfer/themes";
 
-export const theme = nightOwl;
+export const theme = github;
 
 ## 🚀👩‍🚀 Discovery Day 11/13/2020 👨‍🚀🚀
 
 ## Mission: Explore Next.js (a React framework)
 
+![Next.js image](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Nextjs-logo.svg/414px-Nextjs-logo.svg.png)
+
 ---
 
-# React ⚛️
+# React ⚛
 
 #### A JavaScript framework that helps us build faster with:
 
@@ -29,9 +27,9 @@ export const theme = nightOwl;
 
 ---
 
-# React Frameworks
+# Why a React Framework?
 
-#### There are still many decisions to make
+#### There are still many decisions to make:
 
 ##### ❓ Routing library ❓
 
@@ -43,9 +41,9 @@ export const theme = nightOwl;
 
 # Routing
 
-## How users navigate within this application 🧭
+## How users navigate within an application 🧭
 
-##### What happens when you click on links and browser buttons like ◀️ and ▶️ ?
+##### What happens when you click on [links]() and browser buttons like ◀️ and ▶️ ?
 
 ##### How should we handle dynamic routes like `/things/432521`?
 
@@ -63,7 +61,15 @@ export const theme = nightOwl;
 
 ## Routing and the file system work hand in hand 🤝
 
-Examples
+https://www.sampleapp.com/
+
+pages/index.js → https://www.sampleapp.com/
+
+pages/signals/index.js → https://www.sampleapp.com/signals
+
+pages/signals.js → https://www.sampleapp.com/signals
+
+pages/signals/[id].js → https://www.sampleapp.com/signals/512
 
 ---
 
@@ -79,332 +85,197 @@ Examples
 
 ---
 
-<CodeSurferColumns themes={[vsDark, nightOwl]}>
+# The good news...
+
+### Next.js lets us to customize behavior on a _per page basis_
+
+**Static Generation (Ideal)** → Once when the application is built and deployed
+
+**Server Side Rendering (Less ideal)** → Every time
+
+Static generation is the default behavior in Next.js 🏎️
+
+---
+
+# Example Traffic Signals App
+
+**About** - No data fetching needed
+
+**All Traffic Signals** - Fetch data from database at build time
+
+**Individual Traffic Signals** - Fetch data from database at build time
+
+---
+
+<CodeSurfer themes={[vsDark, nightOwl]}>
 
 
-<Step>
-
-
-```js title="React"
-import React, { useState } from "react";
-
-const Counter = () => {
-  const [count, setCount] = useState(0);
-
-  const handleClick = () => {
-    setCount(count + 1);
-  };
-
+```js title="About Page /about/"
+// This page will be pre-rendered into HTML at build time.
+export default function About() {
   return (
-    <button onClick={handleClick}>
-      Clicked {count} {count === 1 ? "time" : "times"}
-    </button>
+    <div>
+      <h1>About Us</h1>
+      {/* ... */}
+    </div>
   );
-};
-
-export default Counter;
+}
 ```
 
-```js title="Svelte"
-<script>
-	let count = 0;
-
-	function handleClick() {
-		count += 1;
-	}
-</script>
-
-<button on:click={handleClick}>
-	Clicked {count} {count === 1 ? 'time' : 'times'}
-</button>
-```
-
-</Step>
-
-
-<Step>
-
-
-```js 4:5 title="Declare state the React way"
-import React, { useState } from "react";
-
-const Counter = () => {
-  // Declare a state variable (count) and an update function (setCount) and set an initial value
-  const [count, setCount] = useState(0);
-
-  const handleClick = () => {
-    setCount(count + 1);
-  };
-
+```js title="All Traffic Signals /signals/"
+// The page component receives signals prop
+// from getStaticProps at build time
+export default function Signals({ signals }) {
   return (
-    <button onClick={handleClick}>
-      Clicked {count} {count === 1 ? "time" : "times"}
-    </button>
-  );
-};
+    <>
+      <h1>Signals</h1>
+      <ul>
+        {signals.map((signal) => (
+          <li key={signal.id}>{signal.name}</li>
+        ))}
+      </ul>
+    </>
+  )
 
-export default Counter;
+// This function runs at build time on the build server
+export async function getStaticProps() {
+  return {
+    props: {
+      signals: await getSignalsFromDatabase()
+    }
+  }
+}
 ```
 
-```js 2:5 title="Declare state the Svelte way"
-<script>
-    // Declare a variable and assign an initial value
-    // Re-assign to update state
-    // Less complex 👍
-	let count = 0;
+```js title="Individual Traffic Signals /signals/[id]"
+// Return the list of ids of signal pages (/signal/[id])
+// that will pre-render at build time
+export async function getStaticPaths() {
+  const signals = await getSignalsFromDatabase();
 
-	function handleClick() {
-		count += 1;
-	}
-</script>
+  const paths = signals.map((signal) => ({
+    params: { id: signal.id },
+  }));
 
-<button on:click={handleClick}>
-	Clicked {count} {count === 1 ? 'time' : 'times'}
-</button>
-```
+  return { paths };
+}
 
-</Step>
-
-
-<Step>
-
-
-```js 6:9 title="Handle click the React way"
-import React, { useState } from "react";
-
-const Counter = () => {
-  const [count, setCount] = useState(0);
-
-  const handleClick = () => {
-    // Call setCount() to update state with incremented value
-    setCount(count + 1);
+// params will contain the id for each generated page.
+export async function getStaticProps({ params }) {
+  return {
+    props: {
+      signal: await getSignalFromDatabase(params.id),
+    },
   };
+}
 
-  return (
-    <button onClick={handleClick}>
-      Clicked {count} {count === 1 ? "time" : "times"}
-    </button>
-  );
-};
-
-export default Counter;
+export default function Signal({ signal }) {
+  // Render signal
+}
 ```
 
-```js 4:8 title="Handle click event the Svelte way"
-<script>
-	let count = 0;
-
-	function handleClick() {
-        // Increment count and re-assign value
-        // Less complex 👍
-		count += 1;
-	}
-</script>
-
-<button on:click={handleClick}>
-	Clicked {count} {count === 1 ? 'time' : 'times'}
-</button>
-```
-
-</Step>
-
-
-<Step>
-
-
-```js 10:13 title="Display a button the React way"
-import React, { useState } from "react";
-
-const Counter = () => {
-  const [count, setCount] = useState(0);
-
-  const handleClick = () => {
-    setCount(count + 1);
-  };
-
-  // Use JSX (extension of JavaScript) for attributes
-  return (
-    <button className="cool-button" onClick={handleClick}>
-      Clicked {count} {count === 1 ? "time" : "times"}
-    </button>
-  );
-};
-
-export default Counter;
-```
-
-```js 9:11 title="Display a button the Svelte way"
-<script>
-	let count = 0;
-
-	function handleClick() {
-		count += 1;
-	}
-</script>
-
-// Use plain old HTML attributes and Svelte directives
-// Similar complexity 😐
-<button class="cool-button" on:click={handleClick}>
-	Clicked {count} {count === 1 ? 'time' : 'times'}
-</button>
-```
-
-</Step>
-
-
-<Step>
-
-
-```js title="Asynchronous fetch the React way"
-// Seems simpler at first
-const { loading, error, data } = useQuery(crashQuery);
-
-return (
-  <div>
-    {loading && <Spinner />}
-    {!!data.atd_txdot_crashes &&
-      data.atd_txdot_crashes.map((crash) => (
-        <div>{crash.crash_id}</div>
-      ))}
-    {error && <div>Error: {error}</div>}
-  </div>
-);
-```
-
-```js title="Asynchronous fetch the Svelte way"
-// Seems more complex at first
-<script>
-	const crashes = query(client, { query: crashQuery });
-</script>
-
-<!-- Await block -->
-  {#await $crashes}
-    <Spinner />
-  {:then result}
-    {#each result.data.atd_txdot_crashes as crash}
-      <div>{crash.crash_id}
-    {/each}
-  {:catch error}
-    Error: {error}
-  {/await}
-```
-
-</Step>
-
-
-<Step>
-
-
-```js 1:2 title="Handling the response the React way"
-// Apollo handles loading and error states and data fetch from Vision Zero database
-const { loading, error, data } = useQuery(crashQuery);
-
-return (
-  <div>
-    // Response handling is elsewhere
-    {loading && <Spinner />}
-    {!!data.atd_txdot_crashes &&
-      data.atd_txdot_crashes.map((crash) => (
-        <div>{crash.crash_id}</div>
-      ))}
-    {error && <div>Error: {error}</div>}
-  </div>
-);
-```
-
-```js 2:3 title="Handling the response the Svelte way"
-<script>
-    // Apollo handles data fetch from from Vision Zero database
-	const crashes = query(client, { query: crashQuery });
-</script>
-
-<!-- Await block -->
-  {#await $crashes}
-    <Spinner />
-  {:then result}
-    {#each result.data.atd_txdot_crashes as crash}
-      <div>{crash.crash_id}
-    {/each}
-  {:catch error}
-    Error: {error}
-  {/await}
-```
-
-</Step>
-
-
-<Step>
-
-
-```js 4:9 title="Displaying the response the React way"
-const { loading, error, data } = useQuery(crashQuery);
-
-return (
-  <div>
-    // Render view conditionally // Easy to get lost in the
-    logical flow
-    {loading && <Spinner />}
-    {!!data.atd_txdot_crashes &&
-      data.atd_txdot_crashes.map((crash) => (
-        <div>{crash.crash_id}</div>
-      ))}
-    {error && <div>Error: {error}</div>}
-  </div>
-);
-```
-
-```js 5:16 title="Displaying the response the Svelte way"
-<script>
-	const crashes = query(client, { query: crashQuery });
-</script>
-
-<!-- Await block -->
-<!-- Mixes response handling with display logic 🙌 -->
-<!-- More readable line-by-line -->
-  {#await $crashes}
-    <Spinner />
-  {:then result}
-    {#each result.data.atd_txdot_crashes as crash}
-      <div>{crash.crash_id}
-    {/each}
-  {:catch error}
-    Error: {error}
-  {/await}
-```
-
-</Step>
-
-
-</CodeSurferColumns>
+</CodeSurfer>
 
 
 ---
 
-# Pros of Svelte
+### What if you want something in between?
 
-- Fast development
-- More readable
-- Claims to render faster but I did not test
-- Built-in cues for accessibility
+**Incremental Static Generation**
 
----
-
-# Cons of Svelte
-
-- It is new so troubleshooting can be frustrating
-- Logical blocks and directives have a learning curve
+- All the benefits of static generation
+- Set `revalidate` parameter to refetch data and update static pages
+- Future requests will contain latest and greatest data
 
 ---
 
-# [Demo](http://localhost:5000/) of Svelte app
+<CodeSurfer>
 
-## Using Vision Zero Database developed for the Vision Zero Team (test environment)
 
-### ⚒️ Tools 🛠️
+```js 20:20 title="Adding Incremental Generation to getStaticProps()"
+// The page component receives signals prop
+// from getStaticProps at build time
+export default function Signals({ signals }) {
+  return (
+    <>
+      <h1>Signals</h1>
+      <ul>
+        {signals.map((signal) => (
+          <li key={signal.id}>{signal.name}</li>
+        ))}
+      </ul>
+    </>
+  )
 
-- Bootstrap to quickly build UI
+// This function runs at build time on the build server
+export async function getStaticProps() {
+  return {
+    props: {
+      signals: await getSignalsFromDatabase(),
+      revalidate: 60
+    }
+  }
+}
+```
 
-  - Sveltestrap https://github.com/bestguy/sveltestrap
+</CodeSurfer>
 
-- Apollo to connect to Hasura (database layer that will provide data via GraphQL API)
-  - svelte-apollo https://github.com/timhall/svelte-apollo
+
+---
+
+### What if you want something in between?
+
+**Client Side Rendering**
+
+- Pre-render static content in a component
+- Hydrate pre-rendered component with data request from user's browser
+- Provide latest and greatest data to a static component
+
+---
+
+<CodeSurfer>
+
+
+```js title="Client Side Rendering"
+import useSWR from "swr";
+
+function WorkOrderQueue() {
+  // fetchAPI is the function that fetches data
+  const { data, error } = useSWR("/api/queues", fetchAPI);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+  return (
+    <div>Work Orders in Queue: {data.queue.length}</div>
+  );
+}
+```
+
+</CodeSurfer>
+
+
+---
+
+# Cool things about Next.js
+
+- Great developer experience
+  - Built-in file organization that ties directly to app routing
+  - Fast Refresh
+- Default to static generation but can deviate on a per page basis
+- Default to static generation for fast applications
+
+---
+
+# Trade-offs of Next.js
+
+- Learning curve for using file structure to create routes
+- Create React App v4 includes Fast Refresh
+- Need to think carefully about how you want app to behave
+
+---
+
+Sources:
+
+- [Next.js Documentation](https://nextjs.org/docs/getting-started)
+- [Vercel Blog - Next.js: Server-side Rendering vs. Static Generation
+  ](https://vercel.com/blog/nextjs-server-side-rendering-vs-static-generation)
